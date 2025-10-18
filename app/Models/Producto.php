@@ -10,7 +10,7 @@ class Producto extends Model
     /** @use HasFactory<\Database\Factories\ProductoFactory> */
     use HasFactory;
 
-    // Relación 1:N (Una etiqueta tiene muchas prendas)
+    // Relación 1:N (Un producto tiene muchas prendas)
     public function categorias(){
         return $this->belongsToMany(Categoria::class);
     }

@@ -10,17 +10,25 @@ class Prenda extends Model
     /** @use HasFactory<\Database\Factories\PrendaFactory> */
     use HasFactory;
 
-     // Una receta puede tener muchas etiquetas y una etiqueta puede tener muchas recetas
+    protected $fillable = [ //Campos que se pueden asignar masivamente
+        'categoria_id', 
+        'user_id',
+        'titulo',
+        'descripcion',
+        'imagen',
+    ];
+
+     // Una prenda puede tener muchos productos y un producto puede tener muchas prendas
     public function productos(){
         return $this->belongsToMany(Producto::class);
     }
 
-    // Una receta pertenece a una categoria  
+    // Una prenda pertenece a una categoria  
     public function categoria() {
         return $this->belongsTo(Categoria::class);
     }
    
-    // Una receta pertenece a un usuario
+    // Una prenda pertenece a un usuario
     public function user() {
         return $this->belongsTo(User::class);
     }

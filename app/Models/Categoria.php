@@ -10,7 +10,7 @@ class Categoria extends Model
     /** @use HasFactory<\Database\Factories\CategoriaFactory> */
     use HasFactory;
 
-     // Relación 1:N (Una categoría tiene muchas prendas)
+     // Relación 1:N (Una categoría tiene muchos productos)
     public function productos(){
         return $this->hasMany(Producto::class);
     }
