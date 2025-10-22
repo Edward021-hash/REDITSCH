@@ -11,7 +11,12 @@ class Producto extends Model
     use HasFactory;
 
     // Relación 1:N (Un producto tiene muchas prendas)
+    public function prendas(){
+        return $this->belongsToMany(Prenda::class);
+    }
+
+    // relación con categorias
     public function categorias(){
-        return $this->belongsToMany(Categoria::class);
+        return $this->belongsTo(Categoria::class);
     }
 }
