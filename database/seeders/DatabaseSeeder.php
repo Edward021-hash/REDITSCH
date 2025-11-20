@@ -17,15 +17,23 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-    // User::factory(10)->create();
+     $this->call(RolSeeder::class);  // Llamar al seeder de roles   
 
         User::factory()->create([
             'name' => 'Eduardo Crisostomo Garcia',
             'email' => 'Edward@example.com',
-        ]);
+        ])-> assignRole('Administrador');  // Asignar rol de Administrador al usuario creado
+
+        User::factory()->create([
+            'name' => 'Claudie Paucek',
+            'email' => 'dalton76@example.com',
+        ])->assignRole('Usuario');  // Asignar rol de usuario al usuario Iraic
 
 
-        User::factory(29)->create();
+        User::factory(29)->create()->each(function ($user) {
+            $user->assignRole('Usuario');
+        });  // Crear 29 usuarios y les asigna el rol de Usuario
+
 
         // Crear categorías, prendas y productos
         $categorias = Categoria::factory(10)->create();
@@ -37,9 +45,11 @@ class DatabaseSeeder extends Seeder
         $prendas = Prenda::all();
         $productos = Producto::all();
 
-
-
-
+ // Asignar entre 2 y 4 etiquetas aleatorias a cada receta
+        // attach() agrega registros a la tabla intermedia sin eliminar los existentes 
+        foreach ($prendas as $prenda) {
+            $prenda->productos()->attach($productos->random(rand(2, 4)));
+        }
 
 
         // Relación muchos a muchos: Categoria <-> Producto

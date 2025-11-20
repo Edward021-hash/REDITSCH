@@ -23,11 +23,11 @@ class UpdatePrendasRequest extends FormRequest
     {
         return [
             'categoria_id' => 'sometimes|exists:categorias,id', // La categoria_id es opcional y debe existir en la tabla categorias
-            'user_id' => 'sometimes|exists:users,id', // La usuario_id es opcional y debe existir en la tabla users
+            //'user_id' => 'sometimes|exists:users,id', // La usuario_id es opcional y debe existir en la tabla users
             'titulo' => 'sometimes|string|max:255', // El titulo es opcional, debe ser una cadena y no debe exceder los 255 caracteres
             'descripcion' => 'sometimes|string', // La descripcion es opcional y debe ser una cadena
             'imagen' => 'sometimes|image|max:2048', // La imagen es opcional, debe ser un archivo de imagen y no debe exceder los 2MB
-            'etiquetas' => 'sometimes|array', // Las etiquetas son opcionales y deben ser un array
+            //'etiquetas' => 'sometimes|array', // Las etiquetas son opcionales y deben ser un array
         ];
 
     }

@@ -16,10 +16,10 @@ class PrendaResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [  // Estructuramos la respuesta de la receta como recurso API
-            'id' => $this->id,
-            'tipo' => 'prenda',
+             'id' => $this->id,
+            'tipo' => 'receta',
             'atributos' => [
-                'categoria' => $this->categoria->nombre,  // Nombre de la categoria asociada a la receta
+                'categoria' =>$this->categoria->nombre,  // Nombre de la categoria asociada a la receta
                 'titulo' => $this->titulo,
                 'descripcion' => $this->descripcion,
                 'imagen' => $this->imagen,

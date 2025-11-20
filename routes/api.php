@@ -7,21 +7,20 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\PrendaController;
 use App\Http\Controllers\Api\ProductoController;
+use App\Http\Controllers\Api\LoginController;
 use App\Models\Prenda;
 use App\Models\Producto;
 
-// Rutas de categorias 
-Route::apiResource('categoria', CategoriaController::class);
+Route::post('login', [LoginController::class, 'store']);  // Ruta para el login
 
-// Rutas de prendas
-Route::apiResource('prenda', PrendaController::class);
+// Rutas protegidas por autenticación 
+Route::middleware('auth:sanctum')->group(function () {  
+    Route::apiResource('categorias', CategoriaController::class);  // Rutas de categorias
+    Route::apiResource('prendas', PrendaController::class);// Rutas de recetas
+    Route::apiResource('productos', ProductoController::class);  // Rutas de etiquetas
+    Route::post('logout', [LoginController::class, 'destroy']); // Ruta para el logout
 
-// Rutas de productos
-Route::apiResource('producto', ProductoController::class);
-
-
-
-
+});
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();

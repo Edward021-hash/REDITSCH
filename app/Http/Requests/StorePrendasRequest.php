@@ -22,12 +22,12 @@ class StorePrendasRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'categoria_id' => 'required|exists:categorias,id', // La categoria_id es obligatoria y debe existir en la tabla categorias
-            'user_id' => 'required|exists:users,id', // La usuario_id es obligatoria y debe existir en la tabla users
+           'categoria_id' => 'required|exists:categorias,id', // La categoria_id es obligatoria y debe existir en la tabla categorias
+            //'user_id' => 'required|exists:users,id', // La usuario_id es obligatoria y debe existir en la tabla users
             'titulo' => 'required|string|max:255', // El titulo es obligatorio, debe ser una cadena y no debe exceder los 255 caracteres
             'descripcion' => 'required|string', // La descripcion es obligatoria y debe ser una cadena
-            'imagen' => 'required|image|max:2048', // La imagen es opcional, debe ser un archivo de imagen y no debe exceder los 2MB
-            'etiquetas' => 'required|array', // Las etiquetas son opcionales y deben ser un array
+            'imagen' => 'required|mimes:webp,jpeg,png,jpg,gif,svg|max:2048', // La imagen es opcional, debe ser un archivo de imagen y no debe exceder los 2MB
+            //'etiquetas' => 'required', // Las etiquetas son opcionales y deben ser un array
         ];
 
     }
