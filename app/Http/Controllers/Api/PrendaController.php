@@ -14,11 +14,70 @@ use App\Models\Prenda; // Importar el modelo Prenda
 
 use Illuminate\Http\Request;
 
+/**
+ * @OA\Schema(
+ *     schema="Prenda",
+ *     type="object",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="tipo", type="string", example="prenda"),
+ *     @OA\Property(
+ *         property="atributos",
+ *         type="object",
+ *         @OA\Property(property="titulo", type="string", example="Camiseta Deportiva"),
+ *         @OA\Property(property="descripcion", type="string", example="Descripción de la prenda"),
+ *         @OA\Property(property="imagen", type="string", example="prendas/imagen.jpg"),
+ *         @OA\Property(property="categoria", type="string", example="Ropa Deportiva")
+ *     )
+ * )
+ * 
+ * @OA\Schema(
+ *     schema="PrendaCollection",
+ *     type="object",
+ *     @OA\Property(
+ *         property="data",
+ *         type="array",
+ *         @OA\Items(ref="#/components/schemas/Prenda")
+ *     )
+ * )
+ * 
+ * @OA\Schema(
+ *     schema="StorePrendaRequest",
+ *     required={"categoria_id","titulo","descripcion","imagen"},
+ *     @OA\Property(property="categoria_id", type="integer", example=1),
+ *     @OA\Property(property="titulo", type="string", example="Prenda 1"),
+ *     @OA\Property(property="descripcion", type="string", example="descripcion de la prenda"),
+ *     @OA\Property(property="imagen", type="string", format="binary")
+ * )
+ * 
+ * @OA\Tag(
+ *     name="Prendas",
+ *     description="Operaciones para gestionar prendas"
+ * )
+ */
+
 
 class PrendaController extends Controller
 {
 
     use AuthorizesRequests; // Usar el trait AuthorizesRequests para la autorización de políticas
+
+ /**
+     * @OA\Get(
+     *     path="/prendas",
+     *     summary="Obtener todas las prendas",
+     *     tags={"Prendas"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de prendas",
+     *         @OA\JsonContent(ref="#/components/schemas/PrendaCollection")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado"
+     *     )
+     * )
+     */
 
     // Muestra todas las recetas
     public function index(){
@@ -29,6 +88,32 @@ class PrendaController extends Controller
         return PrendaResource::collection($prendas); // Devuelve todas las recetas como recurso API
     }
 
+  /**
+     * @OA\Get(
+     *     path="/prendas/{id}",
+     *     summary="Obtener una prenda específica",
+     *     tags={"Prendas"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Prenda encontrada",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", ref="#/components/schemas/Prenda")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Prenda no encontrada"
+     *     )
+     * )
+     */
+
     // Muestra una receta a partir de su id
     public function show(Prenda $prenda){
         // return $receta; // Devuelve la receta
@@ -37,6 +122,33 @@ class PrendaController extends Controller
         $prenda = $prenda->load('categoria', 'productos', 'user');
         return new PrendaResource($prenda); // Devuelve la receta como recurso API 
     }
+
+/**
+     * @OA\Post(
+     *     path="/prendas",
+     *     summary="Crear una nueva prenda",
+     *     tags={"Prendas"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/StorePrendaRequest")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Prenda creada exitosamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", ref="#/components/schemas/Prenda")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación"
+     *     )
+     * )
+     */
 
     // Almacena una nueva prenda
     public function store(StorePrendasRequest $request){  // Usar la request StoreRecetasRequest para validar los datos
@@ -55,10 +167,38 @@ class PrendaController extends Controller
         return response()->json(new PrendaResource($prendas), Response::HTTP_CREATED); 
     }
 
-
-
-
-
+/**
+     * @OA\Put(
+     *     path="/prendas/{id}",
+     *     summary="Actualizar una prenda",
+     *     tags={"Prendas"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(ref="#/components/schemas/StorePrendaRequest")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Prenda actualizada exitosamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", ref="#/components/schemas/Prenda")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación"
+     *     )
+     * )
+     */
 
     // Actualiza una receta existente
     public function update(UpdatePrendasRequest $request, Prenda $prenda){  // Usar la request UpdateRecetasRequest para validar los datos
@@ -83,16 +223,37 @@ class PrendaController extends Controller
         return response()->json(new PrendaResource($prenda), Response::HTTP_OK);
     }
 
-
+/**
+     * @OA\Delete(
+     *     path="/prendas/{id}",
+     *     summary="Eliminar una prenda",
+     *     tags={"Prendas"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Prenda eliminada exitosamente"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Prenda no encontrada"
+     *     )
+     * )
+     */
 
     // Elimina una receta existente
-    public function destroy(Prenda $prendas){  // Inyectar la prenda a eliminar
+    public function destroy(Prenda $prenda){  // Inyectar la prenda a eliminar
      
         $this->authorize('Eliminar prendas');
         
        // $this->authorize('delete', $prendas);  // Autorizar la acción usando la política RecetaPolicy 
      
-        $prendas->delete();  // Eliminar la prenda
+        $prenda->delete();  // Eliminar la prenda
 
         // Devolver una respuesta vacía con código de estado 204 (No Content)
         return response()->json(null, Response::HTTP_NO_CONTENT);

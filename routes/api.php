@@ -11,6 +11,14 @@ use App\Http\Controllers\Api\LoginController;
 use App\Models\Prenda;
 use App\Models\Producto;
 
+// Rutas OPTIONS para CORS
+Route::options('/{any}', function () {
+    return response()->json();
+})->where('any', '.*');
+
+
+
+
 Route::post('login', [LoginController::class, 'store']);  // Ruta para el login
 
 // Rutas protegidas por autenticación 

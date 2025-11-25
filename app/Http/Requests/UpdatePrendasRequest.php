@@ -4,6 +4,35 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     schema="UpdatePrendasRequest",
+ *     required={"categoria_id","titulo","descripcion"},
+ *     @OA\Property(
+ *         property="categoria_id",
+ *         type="integer",
+ *         example=1
+ *     ),
+ *     @OA\Property(
+ *         property="titulo",
+ *         type="string",
+ *         maxLength=255,
+ *         example="Camiseta Deportiva Actualizada"
+ *     ),
+ *     @OA\Property(
+ *         property="descripcion",
+ *         type="string",
+ *         example="Descripción actualizada de la prenda"
+ *     ),
+ *     @OA\Property(
+ *         property="imagen",
+ *         type="string",
+ *         format="binary",
+ *         nullable=true
+ *     )
+ * )
+ */
+
 class UpdatePrendasRequest extends FormRequest
 {
     /**
